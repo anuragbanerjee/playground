@@ -1,0 +1,109 @@
+<html>
+  <head>
+    <title>Scroller Demo</title>
+    <link href="https://fonts.googleapis.com/css?family=Zilla+Slab" rel="stylesheet">
+
+    <style type="text/css">
+      #projectContainer {
+      }
+
+      #projectContainer div {
+        display: block;
+        transition: .1s all;
+        position: relative;
+
+        float: right;
+        height: 100%;
+        width: 100%;
+        max-width: 800px;
+        max-height: 600px;
+        margin: auto;
+        background-position: center;
+        background-size: cover;
+        border-radius: 10px;
+        box-shadow: 1px 1px 5px #A3A3A3;
+      }
+
+      #projectContainer div .cover {
+        display: none;
+      }
+
+      #projectContainer div:hover .cover {
+        position: absolute
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(25, 24, 23, 0.5);
+        /* display: flex; */
+        justify-content: center;
+        align-items: center;
+        font-size: 3em;
+        color: white;
+        font-family: 'Zilla Slab', serif;
+      }
+
+      body {
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="projectContainer">
+      <div style="background: url(https://cdn.dribbble.com/users/5276/screenshots/3643486/skull_beach_tattoo_illustration_kendrickkidd.jpg);">
+        <div class="cover">Death & Skulls</div>
+      </div>
+      <div style="background: url(https://cdn.dribbble.com/users/52084/screenshots/3642269/inti.jpg);">
+        <div class="cover">Provisions</div>
+      </div>
+      <div style="background: url(https://cdn.dribbble.com/users/107759/screenshots/3644144/mnml-photoapp.png);">
+        <div class="cover">Minimal Photoshop</div>
+      </div>
+      <div style="background: url(https://cdn.dribbble.com/users/141665/screenshots/3642749/hari_1.png);">
+        <div class="cover">Chat Bot for Startups</div>
+      </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <script type="text/javascript">
+      var projects = $("#projectContainer").children();
+
+      function render () {
+        var clientHeight = document.body.clientHeight;
+        var scrollHeight = $(window).scrollTop();
+
+        var sectionRaw = scrollHeight / clientHeight + 0.5;
+        var section = Math.floor(sectionRaw);
+        var currentProject = projects[section];
+
+        var computedScale = Math.cos(sectionRaw % 1);
+        if (computedScale > 0.8) {
+          computedScale = 0.8;
+        }
+        $(currentProject).css({
+          transform: `scale(${computedScale}, ${computedScale})`,
+        });
+
+        computedScale = Math.sin(sectionRaw % 1);
+        if (computedScale > 0.8) {
+          computedScale = 0.8;
+        }
+        projects.not(currentProject).css({
+          transform: `scale(${computedScale}, ${computedScale})`,
+        });
+
+        console.log(`
+          clientHeight: ${clientHeight},
+          scrollHeight: ${scrollHeight},
+          percentage: ${Math.round((scrollHeight % clientHeight)/clientHeight * 100)},
+          section: ${section},
+          computedScale: ${computedScale}
+          currentProject: ${currentProject}`);
+      }
+
+      $(document).on("scroll", render);
+      $(document).ready(render);
+    </script>
+  </body>
+</html>
